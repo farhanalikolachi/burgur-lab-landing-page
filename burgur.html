@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burger Lab | The Future of Flavor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts & Animations -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.0.5/dist/lenis.min.js"></script>
+    <script src="https://unpkg.com/split-type"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #09090b; overflow-x: hidden; }
+        h1, h2, h3, .bebas { font-family: 'Bebas Neue', cursive; letter-spacing: 2px; }
+        
+        .parallax-hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(9, 9, 11, 1)), 
+                        url('https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=1920&q=80');
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .custom-cursor {
+            width: 20px; height: 20px; border: 2px solid #dc2626; border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.1s;
+        }
+
+        .burger-float { animation: floating 3s ease-in-out infinite; }
+        @keyframes floating {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+
+        #progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: #dc2626;
+    z-index: 9999;
+}
+
+.img-hover {
+    overflow: hidden;
+}
+.img-hover img {
+    transition: transform 0.5s ease;
+}
+.img-hover:hover img {
+    transform: scale(1.2);
+}
+
+
+.glitch {
+  position: relative;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+.glitch::before {
+  animation: glitchTop 1s infinite;
+  color: red;
+}
+.glitch::after {
+  animation: glitchBottom 1s infinite;
+  color: white;
+}
+@keyframes glitchTop {
+  0% { transform: translate(2px, -2px); }
+  50% { transform: translate(-2px, 2px); }
+}
+@keyframes glitchBottom {
+  0% { transform: translate(-2px, 2px); }
+  50% { transform: translate(2px, -2px); }
+}
+
+.deal-card:hover .deal-badge {
+    transform: rotate(-10deg) scale(1.1);
+    background-color: white;
+    color: #dc2626;
+}
+
+.menu-item {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+    </style>
+</head>
+<body class="text-white">
+
+  
+
+<h1 class="glitch" data-text="Pure Mayhem">Pure Mayhem</h1>
+
+
+    <div class="custom-cursor hidden md:block" id="cursor"></div>
+
+    <!-- 1. NAVIGATION (Mega Menu Style) -->
+    <nav class="fixed w-full z-[100] px-10 py-6 flex justify-between items-center transition-all duration-500" id="navbar">
+        <div class="text-4xl font-black text-red-600 tracking-tighter italic">BURGER LAB</div>
+        <div class="hidden lg:flex space-x-12 text-sm font-bold uppercase tracking-widest">
+            <a href="#thelab" class="hover:text-red-600 transition">The Lab</a>
+            <a href="#Experiments" class="hover:text-red-600 transition">Experiments</a>
+            <a href="#deals" class="hover:text-red-600 transition">Deals</a>
+            <a href="#franchise" class="hover:text-red-600 transition">Franchise</a>
+        </div>
+        <button class="bg-red-600 px-8 py-3 rounded-full font-bold hover:bg-white hover:text-black transition-all">ORDER ONLINE</button>
+    </nav>
+
+    
+
+
+    <!-- 2. HERO SECTION (With GSAP Reveal) -->
+    <section class="parallax-hero h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="container mx-auto px-6 grid lg:grid-cols-2 items-center">
+            <div id="hero-text">
+                <h1 class="text-[120px] leading-[0.9] md:text-[180px] font-black uppercase italic mb-4">
+                    Pure <span class="text-red-600">Mayhem.</span>
+                </h1>
+                <p class="text-xl text-zinc-400 max-w-lg mb-8 border-l-4 border-red-600 pl-6">
+                    We don't follow recipes. We follow chemistry. Every smash is a calculated explosion of flavor.
+                </p>
+               <div class="hidden lg:block relative z-10" id="hero-img">
+    <img src="https://www.freeiconspng.com/uploads/burger-png-11.png" 
+         class="w-full burger-float drop-shadow-[0_35px_35px_rgba(220,38,38,0.4)]" 
+         alt="Big Bang"
+         onerror="this.src='https://via.placeholder.com/500?text=Burger+Image+Missing'">
+</div>
+            </div>
+            <div class="hidden lg:block relative" id="hero-img">
+               <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=1000&auto=format&fit=crop" class="w-full burger-float drop-shadow-[0_35px_35px_rgba(220,38,38,0.3)] rounded-3xl" alt="Big Bang">
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. BUILD YOUR BURGER (Interactive Feature) -->
+    <section class="py-32 bg-zinc-950 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
+            <div class="lg:w-1/2" data-aos="fade-right">
+                <h2 class="text-7xl mb-6">Build Your <br><span class="text-red-600">DNA Burger</span></h2>
+                <p class="text-zinc-500 mb-10 text-lg">Mix, Match, and Master. Select your ingredients and let our scientists handle the heat.</p>
+                
+                <div class="space-y-4">
+                    <div class="glass p-6 rounded-2xl flex justify-between items-center group hover:border-red-600 transition cursor-pointer">
+                        <span class="text-2xl bebas">Select Protein</span>
+                        <span class="text-zinc-600 group-hover:text-red-600">+</span>
+                    </div>
+                    <div class="glass p-6 rounded-2xl flex justify-between items-center group hover:border-red-600 transition cursor-pointer">
+                        <span class="text-2xl bebas">Choose Infusion (Sauce)</span>
+                        <span class="text-zinc-600 group-hover:text-red-600">+</span>
+                    </div>
+                    <div class="glass p-6 rounded-2xl flex justify-between items-center group hover:border-red-600 transition cursor-pointer">
+                        <span class="text-2xl bebas">Add Extra Heat</span>
+                        <span class="text-zinc-600 group-hover:text-red-600">+</span>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:w-1/2 relative" data-aos="zoom-in">
+                <div class="w-full aspect-square rounded-full border-2 border-dashed border-zinc-800 flex items-center justify-center p-20 animate-spin-slow">
+                    <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80" class="rounded-full w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500">
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="bg-red-600 text-white px-8 py-2 rounded-full font-black text-xl tracking-tighter">LAB TESTED</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- 4. LIVE LAB STATS (Bara Feature) -->
+    <section class="py-20 bg-zinc-900 border-y border-zinc-800">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-12 text-center">
+            <div data-aos="fade-up" data-aos-delay="100">
+                <h4 class="text-6xl font-black text-red-600 bebas">42K+</h4>
+                <p class="text-zinc-500 uppercase tracking-widest text-xs mt-2">Active Lab Rats (Customers)</p>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="200">
+                <h4 class="text-6xl font-black text-white bebas">180°C</h4>
+                <p class="text-zinc-500 uppercase tracking-widest text-xs mt-2">Optimal Smashed Temp</p>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="300">
+                <h4 class="text-6xl font-black text-red-600 bebas">0.5s</h4>
+                <p class="text-zinc-500 uppercase tracking-widest text-xs mt-2">Reaction Time</p>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="400">
+                <h4 class="text-6xl font-black text-white bebas">50+</h4>
+                <p class="text-zinc-500 uppercase tracking-widest text-xs mt-2">Secret Formulas</p>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- 9. THE EXPERIMENT DEALS (WITH IMAGES) -->
+<section class="py-32 px-6 bg-black" id="deals-section">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
+            <div data-aos="fade-right">
+                <h2 class="text-7xl font-black italic uppercase leading-none">Limited <br><span class="text-red-600">Grants.</span></h2>
+                <p class="text-zinc-500 mt-4 tracking-widest uppercase text-xs">Access these formulas before they are decommissioned</p>
+            </div>
+            <div class="text-right" data-aos="fade-left">
+                <span class="text-red-600 font-bold border-b-2 border-red-600 pb-2 cursor-pointer hover:text-white hover:border-white transition">VIEW ALL PROTOCOLS</span>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10" id="deals">
+            
+            <!-- Deal 1: The Solo Fusion -->
+            <div class="glass rounded-[3rem] overflow-hidden group border-zinc-800 hover:border-red-600 transition-all duration-500 deal-card" data-aos="fade-up">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition duration-700" alt="Solo Fusion">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    <div class="deal-badge absolute top-4 right-4 bg-red-600 text-white font-black px-4 py-2 rounded-lg rotate-12 transition-all">SAVE 15%</div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-3xl bebas mb-2">Solo Fusion</h3>
+                    <p class="text-zinc-500 text-sm mb-6 uppercase tracking-tighter">1 Classic Smash + Fries + Drink</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-black italic">Rs. 990</span>
+                        <button class="bg-red-600 px-6 py-2 rounded-full text-xs font-bold hover:bg-white hover:text-black transition">ACTIVATE</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deal 2: Binary Logic -->
+            <div class="glass rounded-[3rem] overflow-hidden group border-zinc-800 hover:border-red-600 transition-all duration-500 deal-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1521305916504-4a1121188589?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition duration-700" alt="Binary Logic">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    <div class="deal-badge absolute top-4 right-4 bg-red-600 text-white font-black px-4 py-2 rounded-lg rotate-12 transition-all">POPULAR</div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-3xl bebas mb-2">Binary Logic</h3>
+                    <p class="text-zinc-500 text-sm mb-6 uppercase tracking-tighter">2 Doppler Theory Burgers + 1 Large Fries</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-black italic">Rs. 1,850</span>
+                        <button class="bg-red-600 px-6 py-2 rounded-full text-xs font-bold hover:bg-white hover:text-black transition">ACTIVATE</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deal 3: The Lab Party -->
+           <!-- Deal 3: The Lab Party (Fixed Image) -->
+<div class="glass rounded-[3rem] overflow-hidden group border-zinc-800 hover:border-red-600 transition-all duration-500 deal-card" data-aos="fade-up" data-aos-delay="200">
+    <div class="h-64 overflow-hidden relative">
+        <!-- New Image: Proper Burger Feast -->
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition duration-700" alt="The Lab Party">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+        <div class="deal-badge absolute top-4 right-4 bg-red-600 text-white font-black px-4 py-2 rounded-lg rotate-12 transition-all">VALUE</div>
+    </div>
+    <div class="p-8">
+        <h3 class="text-3xl bebas mb-2">The Lab Party</h3>
+        <p class="text-zinc-500 text-sm mb-6 uppercase tracking-tighter">4 Burgers + 2 Animal Fries + 1.5L Fuel</p>
+        <div class="flex justify-between items-center">
+            <span class="text-3xl font-black italic">Rs. 3,490</span>
+            <button class="bg-red-600 px-6 py-2 rounded-full text-xs font-bold hover:bg-white hover:text-black transition">ACTIVATE</button>
+        </div>
+    </div>
+</div>
+
+            <!-- Deal 4: Midnight Rat -->
+            <div class="glass rounded-[3rem] overflow-hidden group border-zinc-800 hover:border-red-600 transition-all duration-500 deal-card" data-aos="fade-up">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition duration-700" alt="Midnight Rat">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    <div class="deal-badge absolute top-4 right-4 bg-zinc-700 text-white font-black px-4 py-2 rounded-lg rotate-12 transition-all text-[10px]">12AM-3AM</div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-3xl bebas mb-2 text-red-600">Midnight Rat</h3>
+                    <p class="text-zinc-500 text-sm mb-6 uppercase tracking-tighter">Any Double Patty + Free Fries Upgrade</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-black italic">Rs. 1,150</span>
+                        <button class="bg-red-600 px-6 py-2 rounded-full text-xs font-bold hover:bg-white hover:text-black transition">ACTIVATE</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deal 5: Firehouse Protocol -->
+            <div class="glass rounded-[3rem] overflow-hidden group border-zinc-800 hover:border-red-600 transition-all duration-500 deal-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition duration-700" alt="Firehouse Protocol">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    <div class="deal-badge absolute top-4 right-4 bg-orange-600 text-white font-black px-4 py-2 rounded-lg rotate-12 transition-all">HOT</div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-3xl bebas mb-2">Firehouse Protocol</h3>
+                    <p class="text-zinc-500 text-sm mb-6 uppercase tracking-tighter">2 Fire Burgers + 6 Wings + 2 Shakes</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-black italic">Rs. 2,200</span>
+                        <button class="bg-red-600 px-6 py-2 rounded-full text-xs font-bold hover:bg-white hover:text-black transition">ACTIVATE</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deal 6: Student Specimen -->
+            <div class="glass rounded-[3rem] overflow-hidden group border-zinc-800 hover:border-red-600 transition-all duration-500 deal-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="h-64 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition duration-700" alt="Student Specimen">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    <div class="deal-badge absolute top-4 right-4 bg-blue-600 text-white font-black px-4 py-2 rounded-lg rotate-12 transition-all">EDU</div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-3xl bebas mb-2">Student Specimen</h3>
+                    <p class="text-zinc-500 text-sm mb-6 uppercase tracking-tighter">Flat 20% Off on Any Experiment</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-black italic">Varies</span>
+                        <button class="bg-red-600 px-6 py-2 rounded-full text-xs font-bold hover:bg-white hover:text-black transition">REDEEM</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- 10. THE EXPERIMENT LOGS -->
+<section class="py-32 px-6 bg-[#080808]" id="experiments-gallery">
+    <div class="max-w-7xl mx-auto">
+        <div class="mb-20" data-aos="fade-up">
+            <h2 class="text-6xl md:text-8xl font-black italic uppercase tracking-tighter">Research <br><span class="text-red-600">Logs.</span></h2>
+            <p class="text-zinc-500 mt-4 max-w-xl text-lg italic border-l-2 border-red-600 pl-6">
+                We bypassed traditional culinary norms to focus on molecular chemistry. These are our most volatile flavor experiments to date.
+            </p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-16" id="Experiments">
+            
+            <!-- Experiment 01 -->
+            <div class="flex flex-col md:flex-row gap-8 items-center group" data-aos="fade-right">
+                <div class="w-full md:w-1/2 aspect-square rounded-3xl overflow-hidden glass p-4 border-zinc-800 group-hover:border-red-600/50 transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover rounded-2xl grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100">
+                </div>
+                <div class="w-full md:w-1/2">
+                    <span class="text-red-600 font-mono text-sm tracking-[0.5em]">LOG #882 // ACTIVE</span>
+                    <h3 class="text-5xl bebas mt-2 mb-4 group-hover:text-red-600 transition">Doppler Theory</h3>
+                    <p class="text-zinc-400 font-light leading-relaxed mb-6">
+                        An infusion designed to shift from intense spice to a sharp tang with every bite. Engineered using specialized "Smashed Chemistry" protocols.
+                    </p>
+                    <div class="flex gap-4">
+                        <div class="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-[10px] uppercase font-bold tracking-widest text-zinc-500">Unstable Heat</div>
+                        <div class="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-[10px] uppercase font-bold tracking-widest text-zinc-500">Double Patty</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Experiment 02 -->
+            <div class="flex flex-col md:flex-row-reverse gap-8 items-center group" data-aos="fade-left">
+                <div class="w-full md:w-1/2 aspect-square rounded-3xl overflow-hidden glass p-4 border-zinc-800 group-hover:border-red-600/50 transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1596662951482-0c4ba74a6df6?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover rounded-2xl grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100">
+                </div>
+                <div class="w-full md:w-1/2 text-right md:text-right">
+                    <span class="text-red-600 font-mono text-sm tracking-[0.5em]">LOG #404 // CLASSIFIED</span>
+                    <h3 class="text-5xl bebas mt-2 mb-4 group-hover:text-red-600 transition">Fire House</h3>
+                    <p class="text-zinc-400 font-light leading-relaxed mb-6">
+                        Danger level: Critical. A high-risk fusion of ghost peppers and jalapeños, synthesized specifically for elite lab rats with high tolerance.
+                    </p>
+                    <div class="flex gap-4 justify-end">
+                        <div class="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-[10px] uppercase font-bold tracking-widest text-zinc-500">Ghost Infusion</div>
+                        <div class="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-[10px] uppercase font-bold tracking-widest text-zinc-500">High Risk</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Experiment 03 -->
+            <div class="flex flex-col md:flex-row gap-8 items-center group" data-aos="fade-right">
+                <div class="w-full md:w-1/2 aspect-square rounded-3xl overflow-hidden glass p-4 border-zinc-800 group-hover:border-red-600/50 transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover rounded-2xl grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100">
+                </div>
+                <div class="w-full md:w-1/2">
+                    <span class="text-red-600 font-mono text-sm tracking-[0.5em]">LOG #101 // SUCCESS</span>
+                    <h3 class="text-5xl bebas mt-2 mb-4 group-hover:text-red-600 transition">The Big Bang</h3>
+                    <p class="text-zinc-400 font-light leading-relaxed mb-6">
+                        Our breakthrough formula. A violent collision of smashed beef patties, a molten cheese core, and our proprietary "Lab Sauce."
+                    </p>
+                    <div class="flex gap-4">
+                        <div class="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-[10px] uppercase font-bold tracking-widest text-zinc-500">Original DNA</div>
+                        <div class="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-[10px] uppercase font-bold tracking-widest text-zinc-500">Cheese Core</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Experiment 04 -->
+            <div class="flex flex-col md:flex-row-reverse gap-8 items-center group" data-aos="fade-left">
+                <div class="w-full md:w-1/2 aspect-square rounded-3xl overflow-hidden glass p-4 border-zinc-800 group-hover:border-red-600/50 transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover rounded-2xl grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100">
+                </div>
+                <div class="w-full md:w-1/2 text-right md:text-right">
+                    <span class="text-red-600 font-mono text-sm tracking-[0.5em]">LOG #007 // REDACTED</span>
+                    <h3 class="text-5xl bebas mt-2 mb-4 group-hover:text-red-600 transition">Atomic Fries</h3>
+                    <p class="text-zinc-400 font-light leading-relaxed mb-6">
+                        A side-project that became a core specimen. Hand-cut fries topped with prime beef, jalapeños, and our signature atomic fusion sauce.
+                    </p>
+                    <div class="flex gap-4 justify-end">
+                        <div class="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-[10px] uppercase font-bold tracking-widest text-zinc-500">Side Quest</div>
+                        <div class="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-[10px] uppercase font-bold tracking-widest text-zinc-500">Atomic Flavor</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+    <!-- Refined Section: THE SPECIMEN BUNDLES -->
+<section class="py-32 px-6 relative bg-[#050505] overflow-hidden" id="pricing">
+    <!-- Background "Lab" Glows -->
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-red-600/10 blur-[150px] rounded-full"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-red-900/10 blur-[150px] rounded-full"></div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+        <div class="text-center mb-20">
+            <h2 class="text-7xl font-black italic tracking-tighter uppercase mb-4" data-aos="zoom-in">
+                Selected <span class="text-red-600 neon-red">Specimens</span>
+            </h2>
+            <p class="text-zinc-500 font-medium tracking-[0.3em] uppercase text-xs">Precise calibration for every appetite</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-10">
+            <!-- SPECIMEN 01 -->
+            <div class="specimen-card group relative p-[1px] rounded-[3rem] overflow-hidden bg-gradient-to-b from-zinc-700 to-transparent" data-aos="fade-up">
+                <div class="bg-[#0c0c0e] rounded-[3rem] p-10 h-full transition-all duration-500 group-hover:bg-transparent">
+                    <div class="flex justify-between items-start mb-12">
+                        <div>
+                            <p class="text-red-600 font-bold text-xs tracking-widest mb-2">CORE // 01</p>
+                            <h3 class="text-4xl bebas tracking-wider">SOLO SMASHER</h3>
+                        </div>
+                        <div class="w-12 h-12 border border-zinc-800 rounded-full flex items-center justify-center text-zinc-500 group-hover:border-red-600 group-hover:text-red-600 transition">01</div>
+                    </div>
+
+                    <div class="mb-10">
+                        <span class="text-5xl font-black tracking-tighter">Rs. 850</span>
+                    </div>
+
+                    <!-- Lab Gauges (Odd & Beautiful Detail) -->
+                    <div class="space-y-4 mb-12">
+                        <div class="text-[10px] text-zinc-500 uppercase flex justify-between mb-1"><span>Taste Mass</span> <span>80%</span></div>
+                        <div class="w-full h-[2px] bg-zinc-900"><div class="w-[80%] h-full bg-red-600"></div></div>
+                        
+                        <div class="text-[10px] text-zinc-500 uppercase flex justify-between mb-1"><span>Heat Index</span> <span>45%</span></div>
+                        <div class="w-full h-[2px] bg-zinc-900"><div class="w-[45%] h-full bg-white"></div></div>
+                    </div>
+
+                    <button class="w-full py-5 rounded-2xl bg-zinc-900 border border-zinc-800 text-white font-bold hover:bg-red-600 hover:border-red-600 hover:shadow-[0_0_30px_rgba(220,38,38,0.3)] transition-all duration-500">
+                        INITIATE ORDER
+                    </button>
+                </div>
+            </div>
+
+            <!-- SPECIMEN 02 (THE ALPHA) -->
+            <div class="specimen-card group relative p-[1px] rounded-[3rem] overflow-hidden bg-red-600" data-aos="fade-up" data-aos-delay="100">
+                <div class="bg-[#0c0c0e] rounded-[3rem] p-10 h-full">
+                    <div class="absolute top-0 right-10 bg-red-600 px-4 py-1 text-[10px] font-black rounded-b-xl animate-pulse">MOST SYNTHESIZED</div>
+                    <div class="flex justify-between items-start mb-12">
+                        <div>
+                            <p class="text-red-600 font-bold text-xs tracking-widest mb-2">CORE // 02</p>
+                            <h3 class="text-4xl bebas tracking-wider text-red-600">DOUBLE TROUBLE</h3>
+                        </div>
+                        <div class="w-12 h-12 border border-red-600 rounded-full flex items-center justify-center text-red-600">02</div>
+                    </div>
+
+                    <div class="mb-10">
+                        <span class="text-5xl font-black tracking-tighter">Rs. 1,590</span>
+                    </div>
+
+                    <div class="space-y-4 mb-12">
+                        <div class="text-[10px] text-zinc-500 uppercase flex justify-between mb-1"><span>Taste Mass</span> <span>100%</span></div>
+                        <div class="w-full h-[2px] bg-zinc-900"><div class="w-full h-full bg-red-600 shadow-[0_0_10px_#dc2626]"></div></div>
+                        
+                        <div class="text-[10px] text-zinc-500 uppercase flex justify-between mb-1"><span>Heat Index</span> <span>75%</span></div>
+                        <div class="w-full h-[2px] bg-zinc-900"><div class="w-[75%] h-full bg-white"></div></div>
+                    </div>
+
+                    <button class="w-full py-5 rounded-2xl bg-red-600 text-white font-bold hover:bg-white hover:text-black transition-all duration-500">
+                        INITIATE ORDER
+                    </button>
+                </div>
+            </div>
+
+            <!-- SPECIMEN 03 -->
+            <div class="specimen-card group relative p-[1px] rounded-[3rem] overflow-hidden bg-gradient-to-b from-zinc-700 to-transparent" data-aos="fade-up" data-aos-delay="200">
+                <div class="bg-[#0c0c0e] rounded-[3rem] p-10 h-full transition-all duration-500 group-hover:bg-transparent">
+                    <div class="flex justify-between items-start mb-12">
+                        <div>
+                            <p class="text-red-600 font-bold text-xs tracking-widest mb-2">CORE // 03</p>
+                            <h3 class="text-4xl bebas tracking-wider">SQUAD PACK</h3>
+                        </div>
+                        <div class="w-12 h-12 border border-zinc-800 rounded-full flex items-center justify-center text-zinc-500 group-hover:border-red-600 group-hover:text-red-600 transition">03</div>
+                    </div>
+
+                    <div class="mb-10">
+                        <span class="text-5xl font-black tracking-tighter">Rs. 2,990</span>
+                    </div>
+
+                    <div class="space-y-4 mb-12">
+                        <div class="text-[10px] text-zinc-500 uppercase flex justify-between mb-1"><span>Taste Mass</span> <span>95%</span></div>
+                        <div class="w-full h-[2px] bg-zinc-900"><div class="w-[95%] h-full bg-red-600"></div></div>
+                        
+                        <div class="text-[10px] text-zinc-500 uppercase flex justify-between mb-1"><span>Heat Index</span> <span>60%</span></div>
+                        <div class="w-full h-[2px] bg-zinc-900"><div class="w-[60%] h-full bg-white"></div></div>
+                    </div>
+
+                    <button class="w-full py-5 rounded-2xl bg-zinc-900 border border-zinc-800 text-white font-bold hover:bg-red-600 hover:border-red-600 transition-all duration-500">
+                        INITIATE ORDER
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Premium Hover Animation */
+    .specimen-card {
+        transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .specimen-card:hover {
+        transform: translateY(-15px) scale(1.02);
+    }
+    .neon-red {
+        text-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+    }
+</style>
+
+
+<!-- Insert this before the Footer section in your code -->
+
+    <!-- 6. HORIZONTAL SCROLLING REEL (The Food Porn Section) -->
+    <section class="py-20 bg-zinc-950 overflow-hidden">
+        <div class="flex space-x-8 animate-marquee whitespace-nowrap">
+            <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=400&q=80" class="w-80 h-96 object-cover rounded-2xl grayscale hover:grayscale-0 transition duration-500">
+            <img src="https://images.unsplash.com/photo-1596662951482-0c4ba74a6df6?auto=format&fit=crop&w=400&q=80" class="w-80 h-96 object-cover rounded-2xl grayscale hover:grayscale-0 transition duration-500">
+            <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=400&q=80" class="w-80 h-96 object-cover rounded-2xl grayscale hover:grayscale-0 transition duration-500">
+            <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=400&q=80" class="w-80 h-96 object-cover rounded-2xl grayscale hover:grayscale-0 transition duration-500">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80" class="w-80 h-96 object-cover rounded-2xl grayscale hover:grayscale-0 transition duration-500">
+        </div>
+    </section>
+
+    <!-- 11. FRANCHISE OPPORTUNITIES (WITH IMAGES) -->
+<section class="py-32 px-6 bg-zinc-950 relative overflow-hidden" id="franchise">
+    <!-- Background Grid Effect -->
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#dc2626 0.5px, transparent 0.5px); background-size: 30px 30px;"></div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+        <div class="grid lg:grid-cols-2 gap-20 items-center">
+            
+            <div data-aos="fade-right">
+                <!-- Top Badge with Image -->
+                <div class="flex items-center gap-4 mb-8">
+                    <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=100&h=100&q=80" class="w-12 h-12 rounded-full border-2 border-red-600 grayscale hover:grayscale-0 transition duration-500" alt="Partner">
+                    <span class="text-red-600 font-mono text-xs tracking-[0.3em] uppercase">Global Partnership Program</span>
+                </div>
+
+                <h2 class="text-7xl font-black italic uppercase tracking-tighter mb-8">
+                    Scale the <br><span class="text-red-600">Mayhem.</span>
+                </h2>
+                
+                <p class="text-zinc-400 text-lg mb-10 leading-relaxed">
+                    We are looking for visionary partners to expand our molecular labs globally. Join the revolution of smashed chemistry.
+                </p>
+
+                <!-- Feature List with Mini Thumbnails -->
+                <div class="space-y-6 mb-12">
+                    <div class="flex items-center gap-4 p-4 glass rounded-2xl border-zinc-900 hover:border-red-600/30 transition group">
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=150&q=80" class="w-16 h-16 rounded-xl object-cover grayscale group-hover:grayscale-0 transition duration-500" alt="Lab Tech">
+                        <div>
+                            <h4 class="text-xl bebas tracking-widest text-white">Proven Formula</h4>
+                            <p class="text-zinc-500 text-xs">Access our proprietary culinary IP.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 p-4 glass rounded-2xl border-zinc-900 hover:border-red-600/30 transition group">
+                        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=150&q=80" class="w-16 h-16 rounded-xl object-cover grayscale group-hover:grayscale-0 transition duration-500" alt="Logistics">
+                        <div>
+                            <h4 class="text-xl bebas tracking-widest text-white">Global Logistics</h4>
+                            <p class="text-zinc-500 text-xs">Full supply chain and lab-grade equipment.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="group flex items-center gap-4 bg-red-600 text-white px-10 py-5 rounded-full font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-500">
+                    Apply Now 
+                    <span class="group-hover:translate-x-2 transition-transform">→</span>
+                </button>
+            </div>
+
+            <div class="relative" data-aos="zoom-in">
+                <!-- Large Corporate/Lab Image -->
+                <div class="relative rounded-[3rem] overflow-hidden border border-zinc-800 shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" class="w-full h-[600px] object-cover grayscale hover:grayscale-0 transition duration-1000 scale-105 hover:scale-100" alt="Main Lab Office">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                    
+                    <!-- Overlapping Stats Card -->
+                    <div class="absolute bottom-8 left-8 right-8 glass p-8 rounded-3xl border-zinc-800 backdrop-blur-xl">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl bebas tracking-widest">Expansion Status</h3>
+                            <span class="px-3 py-1 bg-green-500/10 text-green-500 text-[10px] font-bold rounded-full border border-green-500/20 uppercase">Live Ops</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="border-l-2 border-red-600 pl-4">
+                                <p class="text-zinc-500 text-[10px] uppercase">Active Labs</p>
+                                <p class="text-3xl font-black italic">50+</p>
+                            </div>
+                            <div class="border-l-2 border-red-600 pl-4">
+                                <p class="text-zinc-500 text-[10px] uppercase">Success Rate</p>
+                                <p class="text-3xl font-black italic">98%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+   <!-- 12. THE MOLECULAR MENU -->
+<section class="py-32 px-6 bg-black" id="functional-menu">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-16" data-aos="fade-up">
+            <div>
+                <h2 class="text-6xl font-black italic uppercase">Select Your <span class="text-red-600">Specimen.</span></h2>
+                <p class="text-zinc-500 mt-2 uppercase tracking-[0.3em] text-xs font-bold">Filter by protein type and intensity</p>
+            </div>
+            
+            <!-- Functional Filter Buttons -->
+            <div class="flex gap-4 mt-8 md:mt-0 bg-zinc-900/50 p-2 rounded-full border border-zinc-800">
+                <button onclick="filterMenu('all')" class="filter-btn px-8 py-2 rounded-full bg-red-600 text-white text-xs font-black uppercase tracking-widest transition active-filter">All</button>
+                <button onclick="filterMenu('beef')" class="filter-btn px-8 py-2 rounded-full hover:bg-zinc-800 text-zinc-400 text-xs font-black uppercase tracking-widest transition">Beef</button>
+                <button onclick="filterMenu('chicken')" class="filter-btn px-8 py-2 rounded-full hover:bg-zinc-800 text-zinc-400 text-xs font-black uppercase tracking-widest transition">Chicken</button>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" id="menu-grid">
+            
+            <!-- CARD 1: BEEF -->
+            <div class="menu-item beef glass p-6 rounded-[2.5rem] border-zinc-800 hover:border-red-600/50 transition-all duration-500 group" data-aos="fade-up">
+                <div class="relative mb-6 overflow-hidden rounded-2xl aspect-square">
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                    <div class="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg border border-red-600/50">
+                        <span class="text-[10px] text-red-600 font-bold tracking-tighter italic uppercase">Beef Unit</span>
+                    </div>
+                </div>
+                <h4 class="text-2xl bebas tracking-wider text-white mb-2">The Big Bang</h4>
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="flex-1 h-[2px] bg-zinc-800"><div class="h-full bg-red-600 w-[85%]"></div></div>
+                    <span class="text-[10px] text-zinc-500 font-bold uppercase">Heat</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-black italic">Rs. 890</span>
+                    <button class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center group-hover:bg-red-600 group-hover:border-red-600 transition-all text-white">+</button>
+                </div>
+            </div>
+
+            <!-- CARD 2: CHICKEN -->
+            <div class="menu-item chicken glass p-6 rounded-[2.5rem] border-zinc-800 hover:border-red-600/50 transition-all duration-500 group" data-aos="fade-up" data-aos-delay="100">
+                <div class="relative mb-6 overflow-hidden rounded-2xl aspect-square">
+                    <img src="https://images.unsplash.com/photo-1610614819513-58e34989848b?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                    <div class="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg border border-zinc-800">
+                        <span class="text-[10px] text-zinc-400 font-bold tracking-tighter italic uppercase">Chicken Unit</span>
+                    </div>
+                </div>
+                <h4 class="text-2xl bebas tracking-wider text-white mb-2">Fire House</h4>
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="flex-1 h-[2px] bg-zinc-800"><div class="h-full bg-red-600 w-[100%]"></div></div>
+                    <span class="text-[10px] text-red-600 font-bold uppercase">Max</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-black italic">Rs. 750</span>
+                    <button class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center group-hover:bg-red-600 group-hover:border-red-600 transition-all text-white">+</button>
+                </div>
+            </div>
+
+            <!-- CARD 3: BEEF -->
+            <div class="menu-item beef glass p-6 rounded-[2.5rem] border-zinc-800 hover:border-red-600/50 transition-all duration-500 group" data-aos="fade-up" data-aos-delay="200">
+                <div class="relative mb-6 overflow-hidden rounded-2xl aspect-square">
+                    <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                    <div class="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg border border-red-600/50">
+                        <span class="text-[10px] text-red-600 font-bold tracking-tighter italic uppercase">Beef Unit</span>
+                    </div>
+                </div>
+                <h4 class="text-2xl bebas tracking-wider text-white mb-2">Doppler Theory</h4>
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="flex-1 h-[2px] bg-zinc-800"><div class="h-full bg-red-600 w-[40%]"></div></div>
+                    <span class="text-[10px] text-zinc-500 font-bold uppercase">Mild</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-black italic">Rs. 1150</span>
+                    <button class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center group-hover:bg-red-600 group-hover:border-red-600 transition-all text-white">+</button>
+                </div>
+            </div>
+
+            <!-- CARD 4: CHICKEN -->
+            <div class="menu-item chicken glass p-6 rounded-[2.5rem] border-zinc-800 hover:border-red-600/50 transition-all duration-500 group" data-aos="fade-up" data-aos-delay="300">
+                <div class="relative mb-6 overflow-hidden rounded-2xl aspect-square">
+                    <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                    <div class="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg border border-zinc-800">
+                        <span class="text-[10px] text-zinc-400 font-bold tracking-tighter italic uppercase">Chicken Unit</span>
+                    </div>
+                </div>
+                <h4 class="text-2xl bebas tracking-wider text-white mb-2">The Doppler C</h4>
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="flex-1 h-[2px] bg-zinc-800"><div class="h-full bg-red-600 w-[60%]"></div></div>
+                    <span class="text-[10px] text-zinc-500 font-bold uppercase">Medium</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-black italic">Rs. 820</span>
+                    <button class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center group-hover:bg-red-600 group-hover:border-red-600 transition-all text-white">+</button>
+                </div>
+            </div>
+
+            <!-- ADDITIONAL DEALS (5-8) -->
+            <!-- CARD 5: BEEF -->
+            <div class="menu-item beef glass p-6 rounded-[2.5rem] border-zinc-800 hover:border-red-600/50 transition-all duration-500 group" data-aos="fade-up">
+                <div class="relative mb-6 overflow-hidden rounded-2xl aspect-square">
+                    <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                    <div class="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg border border-red-600/50">
+                        <span class="text-[10px] text-red-600 font-bold tracking-tighter italic uppercase">Beef Unit</span>
+                    </div>
+                </div>
+                <h4 class="text-2xl bebas tracking-wider text-white mb-2">Quadra Core</h4>
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="flex-1 h-[2px] bg-zinc-800"><div class="h-full bg-red-600 w-[95%]"></div></div>
+                    <span class="text-[10px] text-zinc-500 font-bold uppercase">Intense</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-black italic">Rs. 1450</span>
+                    <button class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center group-hover:bg-red-600 group-hover:border-red-600 transition-all text-white">+</button>
+                </div>
+            </div>
+
+          <div class="menu-item chicken glass p-6 rounded-[2.5rem] border-zinc-800 hover:border-red-600/50 transition-all duration-500 group" data-aos="fade-up">
+    <!-- Height fix: added h-[250px] and w-full to the container -->
+    <div class="relative mb-6 overflow-hidden rounded-2xl w-full h-[250px] bg-zinc-900">
+        <!-- New Stable Image Link -->
+        <img src="https://plus.unsplash.com/premium_photo-1695758787833-ec3e6817046f?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700 block" 
+             alt="Lab Classic"
+             loading="lazy">
+        
+        <div class="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg border border-zinc-800">
+            <span class="text-[10px] text-zinc-400 font-bold tracking-tighter italic uppercase">Chicken Unit</span>
+        </div>
+    </div>
+
+    <h4 class="text-2xl bebas tracking-wider text-white mb-2">Lab Classic</h4>
+    
+    <div class="flex items-center gap-2 mb-6">
+        <div class="flex-1 h-[2px] bg-zinc-800">
+            <div class="h-full bg-red-600 w-[20%]"></div>
+        </div>
+        <span class="text-[10px] text-zinc-500 font-bold uppercase text-zinc-500">Basic</span>
+    </div>
+
+    <div class="flex justify-between items-center">
+        <span class="text-xl font-black italic text-white">Rs. 690</span>
+        <button class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center group-hover:bg-red-600 group-hover:border-red-600 transition-all text-white">
+            +
+        </button>
+    </div>
+</div>
+
+            <!-- CARD 7: BEEF -->
+            <div class="menu-item beef glass p-6 rounded-[2.5rem] border-zinc-800 hover:border-red-600/50 transition-all duration-500 group" data-aos="fade-up" data-aos-delay="200">
+                <div class="relative mb-6 overflow-hidden rounded-2xl aspect-square">
+                    <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                    <div class="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg border border-red-600/50">
+                        <span class="text-[10px] text-red-600 font-bold tracking-tighter italic uppercase">Beef Unit</span>
+                    </div>
+                </div>
+                <h4 class="text-2xl bebas tracking-wider text-white mb-2">Dark Matter</h4>
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="flex-1 h-[2px] bg-zinc-800"><div class="h-full bg-red-600 w-[70%]"></div></div>
+                    <span class="text-[10px] text-zinc-500 font-bold uppercase">Sharp</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-black italic">Rs. 950</span>
+                    <button class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center group-hover:bg-red-600 group-hover:border-red-600 transition-all text-white">+</button>
+                </div>
+            </div>
+
+            <!-- CARD 8: CHICKEN -->
+            <div class="menu-item chicken glass p-6 rounded-[2.5rem] border-zinc-800 hover:border-red-600/50 transition-all duration-500 group" data-aos="fade-up" data-aos-delay="300">
+                <div class="relative mb-6 overflow-hidden rounded-2xl aspect-square">
+                    <img src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                    <div class="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3 py-1 rounded-lg border border-zinc-800">
+                        <span class="text-[10px] text-zinc-400 font-bold tracking-tighter italic uppercase">Chicken Unit</span>
+                    </div>
+                </div>
+                <h4 class="text-2xl bebas tracking-wider text-white mb-2">Atomic C</h4>
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="flex-1 h-[2px] bg-zinc-800"><div class="h-full bg-red-600 w-[90%]"></div></div>
+                    <span class="text-[10px] text-zinc-500 font-bold uppercase">Extreme</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-black italic">Rs. 850</span>
+                    <button class="w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center group-hover:bg-red-600 group-hover:border-red-600 transition-all text-white">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="mt-20 p-8 rounded-3xl border border-dashed border-zinc-800 flex flex-col md:flex-row justify-between items-center opacity-60 hover:opacity-100 transition">
+            <div class="flex items-center gap-6">
+                <div class="text-4xl text-zinc-700 font-black">01</div>
+                <p class="text-zinc-500 text-sm uppercase tracking-widest font-medium">Specimen selected in current session</p>
+            </div>
+            <div class="mt-6 md:mt-0">
+                <p class="text-zinc-500 text-[10px] uppercase text-right">Estimated Total</p>
+                <div class="text-3xl font-black italic text-red-600">Rs. <span id="cart-total">890.00</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- 8. SECRET LAB FAQ -->
+    <section class="py-32 px-6 max-w-4xl mx-auto">
+        <h2 class="text-5xl mb-16 text-center italic">Classified <span class="text-red-600">Intel</span></h2>
+        <div class="space-y-6">
+            <details class="group glass p-6 rounded-2xl cursor-pointer">
+                <summary class="text-2xl bebas list-none flex justify-between items-center group-open:text-red-600 transition">
+                    How do you smash the meat?
+                    <span class="text-red-600 text-3xl font-light group-open:rotate-45 transition">+</span>
+                </summary>
+                <p class="mt-4 text-zinc-500 leading-relaxed font-light">
+                    We use a custom-engineered cold-press smash technique on a 400°F grill to trigger the Maillard reaction instantly, locking in every single drop of flavor.
+                </p>
+            </details>
+            <details class="group glass p-6 rounded-2xl cursor-pointer">
+                <summary class="text-2xl bebas list-none flex justify-between items-center group-open:text-red-600 transition">
+                    Is there a secret menu?
+                    <span class="text-red-600 text-3xl font-light group-open:rotate-45 transition">+</span>
+                </summary>
+                <p class="mt-4 text-zinc-500 leading-relaxed font-light">
+                    Only for the Lab Rats. Keep an eye on our TikTok for hidden codes and experimental burgers that never make it to the main board.
+                </p>
+            </details>
+        </div>
+    </section>
+
+    <!-- Floating Social Sidebar -->
+    <div class="fixed left-6 bottom-10 z-[100] hidden xl:flex flex-col gap-6 text-[10px] tracking-[0.3em] vertical-text origin-left rotate-180 opacity-30 hover:opacity-100 transition">
+        <a href="#" class="hover:text-red-600 transition uppercase">Instagram</a>
+        <a href="#" class="hover:text-red-600 transition uppercase">Twitter</a>
+        <a href="#" class="hover:text-red-600 transition uppercase">Behance</a>
+    </div>
+
+    <!-- Style additions for animations -->
+    <style>
+        .vertical-text { writing-mode: vertical-lr; }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: 200%;
+            animation: marquee 20s linear infinite;
+        }
+        .animate-marquee:hover { animation-play-state: paused; }
+    </style>
+
+<!-- Details Overlay -->
+<div id="details-overlay" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-6">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-lg" onclick="closeDetails()"></div>
+    <div class="glass relative max-w-2xl w-full p-12 rounded-[3rem] border-red-600/50" id="details-content">
+        <button onclick="closeDetails()" class="absolute top-8 right-8 text-zinc-500 hover:text-red-600 text-2xl">✕</button>
+        <div id="info-body">
+            <!-- Dynamic Content Yahan Ayega -->
+        </div>
+    </div>
+</div>
+
+
+
+
+    <!-- 5. NEW MODERN FOOTER -->
+    <footer class="bg-black pt-32 pb-10 px-10">
+        <div class="grid lg:grid-cols-4 gap-16 mb-20">
+            <div class="col-span-2">
+                <h2 class="text-8xl font-black mb-8 italic">BURGER LAB.</h2>
+                <p class="text-zinc-500 max-w-md text-lg">We don't just sell food. We sell a revolution. Join the movement or stay hungry.</p>
+            </div>
+            <div>
+                <h3 class="text-red-600 mb-6 font-bold uppercase tracking-widest text-sm">Experiments</h3>
+                <ul class="space-y-4 text-zinc-400">
+                    <li class="hover:text-white transition cursor-pointer">The Big Bang</li>
+                    <li class="hover:text-white transition cursor-pointer">Doppler Theory</li>
+                    <li class="hover:text-white transition cursor-pointer">Fire House</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-red-600 mb-6 font-bold uppercase tracking-widest text-sm">HQ Lab</h3>
+                <p class="text-zinc-400">Street 12, Defense Phase 6,<br>Karachi, Pakistan</p>
+                <p class="mt-4 text-white font-bold">111-111-LAB</p>
+            </div>
+        </div>
+        <div class="pt-10 border-t border-zinc-900 flex justify-between items-center text-[10px] text-zinc-700 tracking-widest uppercase">
+            <p>© 2026 Designed for the Elite. No Rights Reserved.</p>
+            <div class="flex gap-10">
+                <a href="#">INSTAGRAM</a>
+                <a href="#">TWITTER</a>
+                <a href="#">BEHANCE</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize Scroll Animations
+        AOS.init({ duration: 1000, once: true });
+
+        // Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-black/90', 'backdrop-blur-md', 'py-4');
+            } else {
+                nav.classList.remove('bg-black/90', 'backdrop-blur-md', 'py-4');
+            }
+        });
+
+        // GSAP Hero Animation
+        gsap.from("#hero-text", { opacity: 0, x: -100, duration: 1.5, ease: "power4.out" });
+        gsap.from("#hero-img", { opacity: 0, x: 100, duration: 1.5, ease: "power4.out", delay: 0.3 });
+
+        window.addEventListener('scroll', () => {
+    let scrollTop = window.scrollY;
+    let height = document.body.scrollHeight - window.innerHeight;
+    let progress = (scrollTop / height) * 100;
+    document.getElementById("progress-bar").style.width = progress + "%";
+});
+
+document.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("mousemove", e => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width/2;
+        const y = e.clientY - rect.top - rect.height/2;
+
+        btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+    });
+
+    btn.addEventListener("mouseleave", () => {
+        btn.style.transform = "translate(0,0)";
+    });
+});
+
+const lenis = new Lenis();
+
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf); 
+
+const cursors = document.getElementById('cursors');
+
+document.addEventListener('mousemove', e => {
+    cursor.animate({
+        left: e.clientX + 'px',
+        top: e.clientY + 'px'
+    }, { duration: 300, fill: "forwards" });
+});
+
+const text = new SplitType('#hero-text h1');
+
+gsap.from(text.chars, {
+    opacity: 0,
+    y: 100,
+    stagger: 0.05,
+    duration: 1,
+    ease: "power4.out"
+});
+
+gsap.utils.toArray("section").forEach(section => {
+    gsap.from(section, {
+        opacity: 0,
+        y: 100,
+        duration: 1,
+        scrollTrigger: {
+            trigger: section,
+            start: "top 80%",
+        }
+    });
+});
+
+const detailsData = {
+    lab: {
+        title: "The Molecular Lab",
+        desc: "Hamari lab mein har burger 180°C par smash kiya jata hai taake Maillard reaction perfect ho. Hum zero-frozen policy follow karte hain.",
+        stats: "12 Scientists | 24/7 Research"
+    },
+    experiments: {
+        title: "Current Experiments",
+        desc: "Doppler Theory Burger aur Fire House series hamari latest inventions hain. Hum spicy levels ko DNA level par test karte hain.",
+        stats: "5 Active Specimens"
+    },
+    deals: {
+        title: "Lab Grants (Deals)",
+        desc: "Student discounts aur 'Midnight Lab Rat' offers ab live hain. 20% off on all double smash burgers.",
+        stats: "Valid till May 30"
+    }
+};
+
+function showDetails(type) {
+    const overlay = document.getElementById('details-overlay');
+    const infoBody = document.getElementById('info-body');
+    const data = detailsData[type];
+
+    infoBody.innerHTML = `
+        <h2 class="text-5xl bebas text-red-600 mb-4">${data.title}</h2>
+        <p class="text-zinc-400 text-lg mb-6 italic">${data.desc}</p>
+        <div class="pt-6 border-t border-zinc-800 text-xs tracking-widest text-zinc-500 uppercase">
+            Status: <span class="text-white">${data.stats}</span>
+        </div>
+    `;
+
+    overlay.classList.remove('hidden');
+    // GSAP Animation for smooth entry
+    gsap.fromTo("#details-content", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" });
+}
+
+function closeDetails() {
+    gsap.to("#details-content", { scale: 0.8, opacity: 0, duration: 0.3, onComplete: () => {
+        document.getElementById('details-overlay').classList.add('hidden');
+    }});
+}
+
+
+function filterMenu(category) {
+    const items = document.querySelectorAll('.menu-item');
+    const buttons = document.querySelectorAll('.filter-btn');
+
+    // Update Button Styles
+    buttons.forEach(btn => {
+        btn.classList.remove('bg-red-600', 'text-white');
+        btn.classList.add('text-zinc-400', 'hover:bg-zinc-800');
+    });
+    event.currentTarget.classList.add('bg-red-600', 'text-white');
+    event.currentTarget.classList.remove('text-zinc-400', 'hover:bg-zinc-800');
+
+    // Filter Logic
+    items.forEach(item => {
+        if (category === 'all') {
+            item.style.display = 'block';
+            setTimeout(() => item.style.opacity = '1', 10);
+        } else {
+            if (item.classList.contains(category)) {
+                item.style.display = 'block';
+                setTimeout(() => item.style.opacity = '1', 10);
+            } else {
+                item.style.opacity = '0';
+                setTimeout(() => item.style.display = 'none', 300);
+            }
+        }
+    });
+}
+
+// Initialize Smooth Scroll
+const lenise = new Lenise();
+function raf(time) {
+  lenise.raf(time);
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+// Initialize AOS
+AOS.init({ duration: 1000, once: true });
+
+    </script>
+</body>
+</html>
